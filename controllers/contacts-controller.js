@@ -1,16 +1,17 @@
 const { ctrlWrapper } = require("../decorators");
 
-const contactsService = require("../models/contacts/index.js");
+const Contact = require("../models/contacts/contacts");
 const { HttpError } = require("../helpers");
 
 const getAll = async (req, res) => {
-  const contacts = await contactsService.listContacts();
+  console.log("getAll");
+  const contacts = await Contact.find();
   res.json(contacts);
 };
 
 const getById = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await contactsService.getContactById(contactId);
+  const contact = await Contact.findById(contactId);
   if (!contact) {
     throw HttpError(404);
   }
@@ -18,13 +19,13 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const contact = await contactsService.addContact(req.body);
+  const contact = await Contact.create(req.body);
   res.status(201).json(contact);
 };
 
 const removeById = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await contactsService.removeContact(contactId);
+  const contact = await Contact.findByIdAndRemove(contactId);
 
   if (!contact) {
     throw HttpError(404);
@@ -39,16 +40,31 @@ const updateById = async (req, res) => {
     throw HttpError(400, "missing fields");
   }
   const { contactId } = req.params;
-  const contact = await contactsService.updateContact(contactId, req.body);
+  const contact = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
   if (!contact) {
     throw HttpError(404);
   }
   res.json(contact);
 };
+
+const updateStatusContact = async (req, res) => {
+  const { contactId } = req.params;
+  const contact = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+  if (!contact) {
+    throw HttpError(400, "missing field favorite");
+  }
+  res.json(contact);
+};
+
 module.exports = {
   getAll: ctrlWrapper(getAll),
   getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),
   updateById: ctrlWrapper(updateById),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
   removeById: ctrlWrapper(removeById),
 };
