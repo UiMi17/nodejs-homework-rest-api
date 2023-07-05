@@ -4,23 +4,27 @@ const authController = require("../../controllers/auth-controller");
 
 const { validateBody } = require("../../decorators");
 
-const { isBodyEmpty } = require("../../middlewares");
+const { isBodyEmpty, authenticate } = require("../../middlewares");
 
 const userSchemas = require("../../schemes/user-schemes");
 
 const authRouter = express.Router();
 
 authRouter.post(
-  "/signup",
+  "/register",
   isBodyEmpty,
   validateBody(userSchemas.userSignupScheme),
   authController.signup
 );
 authRouter.post(
-  "/signin",
+  "/login",
   isBodyEmpty,
   validateBody(userSchemas.userSigninScheme),
   authController.signin
 );
+
+authRouter.get("/current", authenticate, authController.getCurrent)
+
+authRouter.post("/logout", authenticate, authController.logout)
 
 module.exports = authRouter;
