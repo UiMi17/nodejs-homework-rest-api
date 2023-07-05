@@ -4,7 +4,7 @@ const Contact = require("../models/contacts/contacts");
 const { HttpError } = require("../helpers");
 
 const getAll = async (req, res) => {
-  console.log("getAll");
+  console.log(req.user);
   const contacts = await Contact.find();
   res.json(contacts);
 };

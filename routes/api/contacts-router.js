@@ -4,6 +4,9 @@ const contactsController = require("../../controllers/contacts-controller");
 const { validateBody } = require("../../decorators");
 const schemes = require("../../schemes/contacts-schemes");
 const { isValidId } = require("../../middlewares");
+const { authenticate } = require("../../middlewares");
+
+router.use(authenticate);
 
 router.get("/", contactsController.getAll);
 
