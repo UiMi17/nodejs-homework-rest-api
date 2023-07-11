@@ -24,9 +24,11 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const { _id: owner } = req.user;
-  const contact = await Contact.create({ ...req.body, owner });
-  res.status(201).json(contact);
+  console.log(req.file);
+  console.log(req.body);
+  // const { _id: owner } = req.user;
+  // const contact = await Contact.create({ ...req.body, owner });
+  // res.status(201).json(contact);
 };
 
 const removeById = async (req, res) => {
