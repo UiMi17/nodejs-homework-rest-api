@@ -1,7 +1,11 @@
 const { ctrlWrapper } = require("../decorators");
+const fs = require("fs/promises");
+const path = require("path");
 
 const Contact = require("../models/contacts/contacts");
 const { HttpError } = require("../helpers");
+
+const avatarsDir = path.resolve("public", "avatars");
 
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
@@ -24,11 +28,17 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  console.log(req.file);
-  console.log(req.body);
-  // const { _id: owner } = req.user;
-  // const contact = await Contact.create({ ...req.body, owner });
-  // res.status(201).json(contact);
+  const { path: oldPath, filename } = req.file;
+  const newPath = path.join(avatarsDir, filename);
+  fs.rename(oldPath, newPath);
+  const avatar = path.join("avatars", filename);
+  const { _id: owner } = req.user;
+  const contact = await Contact.create({
+    ...req.body,
+    avatarURL: avatar,
+    owner,
+  });
+  res.status(201).json(contact);
 };
 
 const removeById = async (req, res) => {
