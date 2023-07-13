@@ -3,6 +3,7 @@ const router = express.Router();
 const contactsController = require("../../controllers/contacts-controller");
 const { validateBody } = require("../../decorators");
 const schemes = require("../../schemes/contacts");
+const isBodyEmpty = require("../../middlewares/isBodyEmpty");
 
 router.get("/", contactsController.getAll);
 
@@ -16,6 +17,11 @@ router.post(
 
 router.delete("/:contactId", contactsController.removeById);
 
-router.put("/:contactId", contactsController.updateById);
+router.put(
+  "/:contactId",
+  isBodyEmpty,
+  validateBody(schemes.contactAddScheme),
+  contactsController.updateById
+);
 
 module.exports = router;

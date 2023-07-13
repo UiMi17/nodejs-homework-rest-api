@@ -35,9 +35,6 @@ const removeById = async (req, res) => {
 };
 
 const updateById = async (req, res) => {
-  if (Object.keys(req.body).length === 0) {
-    throw HttpError(400, "missing fields");
-  }
   const { contactId } = req.params;
   const contact = await contactsService.updateContact(contactId, req.body);
   if (!contact) {
@@ -45,6 +42,7 @@ const updateById = async (req, res) => {
   }
   res.json(contact);
 };
+
 module.exports = {
   getAll: ctrlWrapper(getAll),
   getById: ctrlWrapper(getById),
