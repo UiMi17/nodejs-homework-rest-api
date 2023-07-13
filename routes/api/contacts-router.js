@@ -3,7 +3,7 @@ const router = express.Router();
 const contactsController = require("../../controllers/contacts-controller");
 const { validateBody } = require("../../decorators");
 const schemes = require("../../schemes/contacts-schemes");
-const { isValidId } = require("../../middlewares");
+const { isValidId, isBodyEmpty } = require("../../middlewares");
 
 router.get("/", contactsController.getAll);
 
@@ -20,6 +20,7 @@ router.delete("/:contactId", isValidId, contactsController.removeById);
 router.put(
   "/:contactId",
   isValidId,
+  isBodyEmpty,
   validateBody(schemes.contactAddScheme),
   contactsController.updateById
 );
