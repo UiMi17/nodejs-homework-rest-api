@@ -42,7 +42,8 @@ const signin = async (req, res) => {
     throw HttpError(401, "Email or password is wrong");
   }
 
-  const { _id: id } = user;
+  const { _id: id, subscription } = user;
+  console.log(email, subscription);
 
   const payload = {
     id,
@@ -52,8 +53,13 @@ const signin = async (req, res) => {
 
   await User.findByIdAndUpdate(id, { token });
 
+
   res.json({
     token,
+    user: {
+      email,
+      subscription,
+    },
   });
 };
 

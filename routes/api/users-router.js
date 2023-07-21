@@ -1,6 +1,6 @@
 const express = require("express");
 
-const authController = require("../../controllers/auth-controller");
+const usersController = require("../../controllers/users-controller");
 
 const { validateBody } = require("../../decorators");
 
@@ -8,23 +8,23 @@ const { isBodyEmpty, authenticate } = require("../../middlewares");
 
 const userSchemas = require("../../schemes/user-schemes");
 
-const authRouter = express.Router();
+const usersRouter = express.Router();
 
-authRouter.post(
+usersRouter.post(
   "/register",
   isBodyEmpty,
   validateBody(userSchemas.userSignupScheme),
-  authController.signup
+  usersController.signup
 );
-authRouter.post(
+usersRouter.post(
   "/login",
   isBodyEmpty,
   validateBody(userSchemas.userSigninScheme),
-  authController.signin
+  usersController.signin
 );
 
-authRouter.get("/current", authenticate, authController.getCurrent)
+usersRouter.get("/current", authenticate, usersController.getCurrent)
 
-authRouter.post("/logout", authenticate, authController.logout)
+usersRouter.post("/logout", authenticate, usersController.logout)
 
-module.exports = authRouter;
+module.exports = usersRouter;
