@@ -54,7 +54,7 @@ const signin = async (req, res) => {
     throw HttpError(401, "Email or password is wrong");
   }
 
-  const { _id: id } = user;
+  const { _id: id, subscription } = user;
 
   const payload = {
     id,
@@ -66,6 +66,7 @@ const signin = async (req, res) => {
 
   res.json({
     token,
+    subscription,
   });
 };
 
